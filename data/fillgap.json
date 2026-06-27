@@ -1,0 +1,30 @@
+{
+  "name": "Fill the Gap",
+  "tagline": "Cards Against Humanity, but you write your own filth. One judge crowns the winner each round.",
+  "prompts": [
+    { "text": "Nothing ruins a Bunnings snag quite like ___.", "nsfw": false },
+    { "text": "The real reason the Australia Day barbie got shut down: ___.", "nsfw": false },
+    { "text": "You won't last five minutes at Schoolies if you bring ___.", "nsfw": false },
+    { "text": "My nan's secret to a long life? ___.", "nsfw": false },
+    { "text": "The fourth emergency service Australia desperately needs: ___.", "nsfw": false },
+    { "text": "I knew the date was over the second they pulled out ___.", "nsfw": false },
+    { "text": "Centrelink rejected my claim because of ___.", "nsfw": false },
+    { "text": "The new ride at Dreamworld is just ___.", "nsfw": false },
+    { "text": "What's the most cooked thing you've done at a servo at 3am? ___.", "nsfw": false },
+    { "text": "The Big Banana is being replaced with a giant ___.", "nsfw": false },
+    { "text": "Why did Bunnings ban me for life? ___.", "nsfw": false },
+    { "text": "The Bachelor's final rose went to a contestant whose talent was ___.", "nsfw": false },
+    { "text": "Straya's next Olympic event: ___.", "nsfw": false },
+    { "text": "I got kicked out of the footy for ___.", "nsfw": false },
+    { "text": "The most Aussie way to die is ___.", "nsfw": false },
+    { "text": "Found in the glovebox of every tradie's ute: ___ and a single thong.", "nsfw": false },
+    { "text": "Hottest 100 was ruined this year by ___.", "nsfw": false },
+    { "text": "My Tinder bio just says: '___'.", "nsfw": true },
+    { "text": "The toilets at the music festival were full of ___.", "nsfw": true },
+    { "text": "Things you don't want to hear during a one-night stand: '___'.", "nsfw": true },
+    { "text": "Why did my Hinge date ghost me? ___.", "nsfw": true },
+    { "text": "The buck's night took a dark turn when someone produced ___.", "nsfw": true },
+    { "text": "The new safe-sex campaign slogan: '___'.", "nsfw": true },
+    { "text": "I told my GP the rash was caused by ___.", "nsfw": true }
+  ]
+}

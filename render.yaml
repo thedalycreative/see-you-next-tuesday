@@ -1,0 +1,13 @@
+# Render Blueprint — one-click deploy for See You Next Tuesday.
+# New + → "Blueprint" in the Render dashboard, point it at this repo, done.
+services:
+  - type: web
+    name: see-you-next-tuesday
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"

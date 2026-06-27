@@ -1,0 +1,7 @@
+node_modules/
+.DS_Store
+*.log
+.remember/
+.playwright-mcp/
+host-lobby.png
+player-join.png

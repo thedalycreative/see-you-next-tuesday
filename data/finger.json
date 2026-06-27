@@ -1,0 +1,26 @@
+{
+  "name": "Point the Finger",
+  "tagline": "\"Who's most likely to...\" Everyone votes a mate. Read the room right and you score. No hiding.",
+  "prompts": [
+    { "text": "Who's most likely to get barred from their local?", "nsfw": false },
+    { "text": "Who's most likely to start a fight at a kid's birthday party?", "nsfw": false },
+    { "text": "Who's most likely to become a millionaire and lose it all?", "nsfw": false },
+    { "text": "Who's most likely to get a regrettable tattoo in Bali?", "nsfw": false },
+    { "text": "Who's most likely to cry during an ad for a phone plan?", "nsfw": false },
+    { "text": "Who's most likely to end up on A Current Affair?", "nsfw": false },
+    { "text": "Who's most likely to get caught doing a runner on a restaurant bill?", "nsfw": false },
+    { "text": "Who's most likely to fight a magpie and lose?", "nsfw": false },
+    { "text": "Who's most likely to accidentally join a cult?", "nsfw": false },
+    { "text": "Who's most likely to peak in a Bunnings car park?", "nsfw": false },
+    { "text": "Who's most likely to ghost the group and move to Byron?", "nsfw": false },
+    { "text": "Who's most likely to get caught speeding past a school in a Hyundai Excel?", "nsfw": false },
+    { "text": "Who's most likely to bring a guitar to the party uninvited?", "nsfw": false },
+    { "text": "Who's most likely to text their ex at 2am?", "nsfw": true },
+    { "text": "Who's most likely to have a wild secret OnlyFans?", "nsfw": true },
+    { "text": "Who's most likely to hook up with someone at a funeral?", "nsfw": true },
+    { "text": "Who's most likely to get caught in the act by their flatmate?", "nsfw": true },
+    { "text": "Who's most likely to have a body count they'd lie about?", "nsfw": true },
+    { "text": "Who's most likely to send a thirst trap to the wrong group chat?", "nsfw": true },
+    { "text": "Who's most likely to have the weirdest search history?", "nsfw": true }
+  ]
+}

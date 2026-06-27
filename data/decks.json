@@ -1,0 +1,80 @@
+{
+  "decks": [
+    {
+      "id": "dinkum",
+      "name": "Dinkum Dictionary",
+      "tagline": "Real Aussie slang nobody under 40 actually knows. Make up a meaning. Fool the room.",
+      "nsfw": false,
+      "cards": [
+        { "term": "Wobbegong", "answer": "A type of carpet shark that lies flat on the seafloor and looks like a shaggy doormat." },
+        { "term": "Bunyip", "answer": "A mythical creature said to lurk in swamps, billabongs and creeks, used to scare kids off the water." },
+        { "term": "Bingle", "answer": "A minor car accident — a prang, a fender bender." },
+        { "term": "Wonky", "answer": "Unsteady, crooked or not working properly." },
+        { "term": "Dunny budgie", "answer": "A blowfly — the big noisy ones that hang around the toilet." },
+        { "term": "Cark it", "answer": "To die, or for a machine to stop working completely." },
+        { "term": "Mollydooker", "answer": "A left-handed person." },
+        { "term": "Bull dust", "answer": "Fine red outback dust, or alternatively, complete and utter nonsense." },
+        { "term": "Furphy", "answer": "A rumour or false story — named after the Furphy water carts soldiers gossiped around." },
+        { "term": "Larrikin", "answer": "A mischievous, cheeky person who loves a prank and disrespects authority." },
+        { "term": "Gobful", "answer": "An angry mouthful of abuse, as in 'he gave the umpire a gobful'." },
+        { "term": "Drongo", "answer": "A hopeless idiot — named after a famously useless 1920s racehorse." },
+        { "term": "Bodgy", "answer": "Of poor or fake quality; dodgy and badly made." },
+        { "term": "Wuss bag", "answer": "A coward; someone who is pathetically timid." },
+        { "term": "Chocka", "answer": "Completely full, packed to capacity — short for 'chock-a-block'." },
+        { "term": "Maggoted", "answer": "Extremely drunk." },
+        { "term": "Goog", "answer": "An egg — as in 'full as a goog', meaning very drunk or very full." },
+        { "term": "Trackie dacks", "answer": "Tracksuit pants; comfy daggy sweatpants." },
+        { "term": "Yakka", "answer": "Hard work or physical labour." },
+        { "term": "Bog in", "answer": "To start eating enthusiastically; dig into your food." }
+      ]
+    },
+    {
+      "id": "townies",
+      "name": "Is That A Real Town?",
+      "tagline": "These are all genuine Australian place names. Invent why the town is famous. Real fact wins.",
+      "nsfw": false,
+      "cards": [
+        { "term": "Tittybong, VIC", "answer": "A tiny farming locality in northern Victoria; the name likely comes from an Aboriginal word, possibly meaning 'place of the tadpoles'." },
+        { "term": "Humpty Doo, NT", "answer": "A Top End town near Darwin known for its giant fibreglass Boxing Crocodile statue." },
+        { "term": "Iron Knob, SA", "answer": "A mining town considered the birthplace of Australia's steel industry, named for its iron-ore hills." },
+        { "term": "Mount Buggery, VIC", "answer": "A peak in the Alpine National Park, near 'Terrible Hollow' and 'The Crosscut Saw', named by a frustrated cattleman." },
+        { "term": "Come By Chance, NSW", "answer": "A small village whose name records that the land was acquired unexpectedly, 'by chance'." },
+        { "term": "Nowhere Else, TAS", "answer": "A rural locality near Sheffield in Tasmania; the road literally goes nowhere else." },
+        { "term": "Wagga Wagga, NSW", "answer": "A major regional city whose Wiradjuri name is said to mean 'place of many crows'." },
+        { "term": "Banana, QLD", "answer": "A town named not after the fruit but after a dun-coloured bullock called 'Banana'." },
+        { "term": "Useless Loop, WA", "answer": "A remote salt-mining settlement on Shark Bay, named from the French 'Havre Inutile' (useless harbour)." },
+        { "term": "Mukinbudin, WA", "answer": "A Wheatbelt town whose name is thought to mean 'place of the wood used for making spears'." },
+        { "term": "Burrumbuttock, NSW", "answer": "A small farming village near Albury, famous for organising massive 'Hay Runs' to drought-stricken farmers." },
+        { "term": "Dismal Swamp, TAS", "answer": "A sinkhole and blackwood forest reserve in the state's north-west, once home to a slide attraction." },
+        { "term": "Chinaman Wells, SA", "answer": "A locality on the Eyre Peninsula, named for wells dug in the area during the colonial era." },
+        { "term": "Innaloo, WA", "answer": "A Perth suburb whose name derives from a nearby swamp, 'Lake Innaloo', not the toilet." },
+        { "term": "Foul Bay, SA", "answer": "A small coastal holiday town on the Yorke Peninsula, named by an unimpressed early surveyor." },
+        { "term": "Eggs and Bacon Bay, TAS", "answer": "A bay in southern Tasmania reportedly named after the yellow-and-red wildflowers growing there." }
+      ]
+    },
+    {
+      "id": "afterdark",
+      "name": "After Dark (18+)",
+      "tagline": "Filthy obscure words and the actual definitions. Lean in. Toggle off if Nan's playing.",
+      "nsfw": true,
+      "cards": [
+        { "term": "Borborygmus", "answer": "The rumbling, gurgling noise made by gas moving through your guts." },
+        { "term": "Pandiculation", "answer": "The act of stretching and yawning at the same time, especially when you wake up." },
+        { "term": "Maritorious", "answer": "Excessively fond of, or devoted to, one's husband." },
+        { "term": "Gardyloo", "answer": "An old warning cry shouted before throwing slops and chamber-pot contents out a window." },
+        { "term": "Lollygag", "answer": "To dawdle, waste time, or mess about instead of getting on with it." },
+        { "term": "Quockerwodger", "answer": "A wooden puppet on strings; figuratively, a politician controlled by someone else." },
+        { "term": "Fartlek", "answer": "A real running training method alternating fast and slow bursts — Swedish for 'speed play'." },
+        { "term": "Cockalorum", "answer": "A boastful little man with an inflated opinion of himself." },
+        { "term": "Bumfuzzle", "answer": "To confuse, fluster or bewilder someone completely." },
+        { "term": "Wamble", "answer": "To feel queasy, or for your stomach to roll with nausea." },
+        { "term": "Snollygoster", "answer": "A shrewd, unprincipled person, especially a scheming politician." },
+        { "term": "Mumpsimus", "answer": "A person who stubbornly clings to a belief or habit even after being proven wrong." },
+        { "term": "Slubberdegullion", "answer": "A filthy, slobbering, worthless slob of a person." },
+        { "term": "Crapulence", "answer": "The sick, hungover feeling caused by too much eating or drinking." },
+        { "term": "Fipple", "answer": "The mouthpiece block of a recorder or whistle that splits the air." },
+        { "term": "Nudiustertian", "answer": "Relating to the day before yesterday." }
+      ]
+    }
+  ]
+}

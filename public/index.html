@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#000000" />
+  <title>See You Next Tuesday</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="wrap stack-lg" style="max-width:460px">
+    <div class="center stack">
+      <div class="logo"><span class="cu">C U</span> Next Tuesday</div>
+      <div class="tag">A filthy little party game. Bluff your mates. Spot the truth.</div>
+    </div>
+
+    <!-- JOIN -->
+    <div id="join" class="card stack">
+      <div class="kicker">Join the game</div>
+      <input id="code" class="code-input" maxlength="4" autocomplete="off" autocapitalize="characters" placeholder="CODE" />
+      <input id="name" maxlength="20" autocomplete="off" placeholder="Your name (keep it classy)" />
+      <button id="joinBtn" class="accent">Jump in</button>
+      <div class="center muted" style="font-size:13px">Get the 4-letter code off the big screen.</div>
+    </div>
+
+    <div class="center">
+      <a href="/host" class="muted" style="font-size:13px">Running this on the telly? &nbsp;Open the host screen →</a>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/player.js"></script>
+</body>
+</html>

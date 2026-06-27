@@ -1,0 +1,18 @@
+{
+  "name": "Odd One Out",
+  "tagline": "Everyone gets the same secret word. One of you is the Mole and has no idea. Give a clue. Sniff out the imposter.",
+  "categories": [
+    { "category": "Servo Servery", "nsfw": false, "words": ["Meat pie", "Chiko Roll", "Slurpee", "Mrs Mac's", "Dim sim", "Potato cake", "Red frog", "Iced coffee"] },
+    { "category": "Aussie Snacks", "nsfw": false, "words": ["Tim Tam", "Vegemite", "Milo", "Shapes", "Burger Rings", "Twisties", "Caramello Koala", "Fairy bread"] },
+    { "category": "At the Beach", "nsfw": false, "words": ["Boardies", "Zinc", "Esky", "Bluebottle", "Rip", "Boogie board", "Sandfly", "Surf lifesaver"] },
+    { "category": "Iconic Aussie TV", "nsfw": false, "words": ["Home and Away", "Bluey", "Round the Twist", "MasterChef", "The Block", "Hey Hey It's Saturday", "Kath & Kim", "Gogglebox"] },
+    { "category": "Backyard Cricket", "nsfw": false, "words": ["Tippity run", "Six and out", "The Hills Hoist", "Tennis ball", "Auto-wicky", "Garbage bin stumps", "One hand one bounce", "The fence is out"] },
+    { "category": "Bogan Royalty", "nsfw": false, "words": ["Mullet", "Ute", "Flanno", "VB longneck", "Southern Cross tattoo", "Maccas run", "Dole bludger", "Burnout"] },
+    { "category": "Big Night Out", "nsfw": false, "words": ["Goon sack", "Kebab", "Maxi taxi", "Pre-drinks", "The smoking area", "Bouncer", "Last drinks", "Servo pie run"] },
+    { "category": "Pub Classics", "nsfw": false, "words": ["Chicken parma", "Pokies", "Schooner", "Meat tray raffle", "Beer garden", "Counter meal", "Bar fly", "Trivia night"] },
+    { "category": "Dangerous Wildlife", "nsfw": false, "words": ["Drop bear", "Funnel-web", "Magpie swoop", "Cassowary", "Box jellyfish", "Cane toad", "Redback under the dunny seat", "Brown snake"] },
+    { "category": "Tradie Life", "nsfw": false, "words": ["High-vis", "Smoko", "The ute", "Hi-vis crack", "Bunnings sausage", "Esky", "Knock-off beer", "Sparky"] },
+    { "category": "The Group Chat", "nsfw": true, "words": ["Left on read", "The dry texter", "3am drunk text", "Screenshot receipts", "Nudes mishap", "The ex who watches your stories", "Read receipts on", "Dick pic"] },
+    { "category": "Bedroom Mishaps", "nsfw": true, "words": ["The wrong name", "Squeaky bed", "Roommate walks in", "Cramp mid-act", "Phone goes off", "Dirty talk fail", "Lights stay on", "Awkward silence"] }
+  ]
+}
