@@ -3,6 +3,10 @@
 const socket = io();
 const app = document.getElementById("app");
 let created = null;
+const logo = `<div class="logo"><span class="cu">C U</span> Next Tuesday</div>`;
+function renderConnecting(msg) {
+  app.innerHTML = `<div class="center stack" style="margin-top:16%">${logo}<div class="muted" style="margin-top:18px">${msg}</div></div>`;
+}
 
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 function toast(msg) {
@@ -14,7 +18,13 @@ function toast(msg) {
 }
 socket.on("host:error", toast);
 
-socket.emit("host:create");
+// Render something immediately — never a blank screen while the socket connects.
+renderConnecting("Warming up…");
+// (Re)create the room on every connect, so a dropped connection or a free-tier
+// cold start recovers on its own instead of leaving the screen stuck blank.
+socket.on("connect", () => { renderConnecting("Setting up the room…"); socket.emit("host:create"); });
+socket.on("connect_error", () => renderConnecting("Can't reach the server — retrying. A free host can take ~30s to wake up."));
+socket.on("disconnect", () => renderConnecting("Connection dropped — reconnecting…"));
 socket.on("host:created", (d) => (created = d));
 
 socket.on("host:state", (s) => {
@@ -26,7 +36,6 @@ socket.on("host:state", (s) => {
   else if (s.phase === "GAMEOVER") render.gameover(s);
 });
 
-const logo = `<div class="logo"><span class="cu">C U</span> Next Tuesday</div>`;
 const roundPill = (s) => `<div class="pill mono">Round ${s.round} / ${s.totalRounds}</div>`;
 const term = (txt, size = "clamp(42px,8vw,96px)") => `<div class="term" style="font-size:${size}">${esc(txt)}</div>`;
 const blank = (text) => `<div style="font-size:clamp(28px,5vw,56px);font-weight:800;line-height:1.15;letter-spacing:-0.02em">${esc(text).replace(/_{2,}/g, '<span style="color:var(--accent)">______</span>')}</div>`;
