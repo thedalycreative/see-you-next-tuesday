@@ -67,7 +67,7 @@ const render = {
             ${s.modes
               .map(
                 (md) => `<div class="deck ${md.id === s.mode ? "sel" : ""}" data-mode="${md.id}">
-                  <div class="nm">${esc(md.name)}</div>
+                  <div class="spread"><div class="nm">${esc(md.name)}</div>${md.adult ? `<div class="nsfw">🔞 X-rated</div>` : ""}</div>
                   <div class="tl">${esc(md.tagline)}</div>
                   <div class="tl mono" style="margin-top:8px">${md.minPlayers}+ players</div>
                 </div>`
@@ -98,6 +98,11 @@ const render = {
                       )
                       .join("")}
                   </div></div>`
+              : m?.adult
+              ? `<div class="card center stack" style="max-width:520px;margin:0 auto">
+                  <div class="nsfw">🔞 Adults only · consenting players</div>
+                  <div class="muted">Filthy by design. Everyone stakes a secret <b>prize</b> on their phone now — winner collects, losers deliver. Set yours before the host starts.</div>
+                </div>`
               : `<div class="stack center">
                   <div class="kicker">Filth level</div>
                   <button class="${s.settings.spicy ? "accent" : "ghost"}" id="spicy" style="max-width:320px;margin:0 auto">${s.settings.spicy ? "🔞 Sending it (18+ unlocked)" : "😇 Keeping it clean — tap to send it"}</button>
@@ -140,6 +145,10 @@ const render = {
       body = `<div class="kicker">Secret word's on your phones · one of you is the Mole</div>
         <div class="muted" style="margin-top:14px">Category</div>${term(s.category)}
         <div class="muted" style="margin-top:8px">Everyone: give one clue word.</div>`;
+    else if (s.mode === "hole")
+      body = `<div class="kicker">Everyone: confess on your phones 🔥</div>
+        <div style="max-width:980px;margin:16px auto">${term(s.prompt, "clamp(28px,5vw,60px)")}</div>
+        <div class="muted">Keep it short — it'll hide among the bot's filth.</div>`;
     else
       body = `<div class="kicker">Everyone: invent a definition for</div>${term(s.term)}<div class="muted">On your phones now. Make it believable.</div>`;
 
@@ -159,6 +168,12 @@ const render = {
     } else if (s.mode === "finger") {
       body = `<div class="center"><div class="kicker">Point the finger</div><div style="max-width:900px;margin:16px auto">${term(s.prompt, "clamp(30px,5vw,60px)")}</div>
         <div class="muted">Vote on your phones.</div></div>`;
+    } else if (s.mode === "hole") {
+      body = `<div class="center" style="margin-bottom:18px"><div class="kicker">Which are REAL men? Read 'em out, then guess on your phones</div>
+          <div style="max-width:900px;margin:10px auto 0">${term(s.prompt, "clamp(22px,4vw,44px)")}</div></div>
+        <div class="stack" style="max-width:860px;margin:0 auto">
+          ${s.options.map((o) => `<div class="opt spread"><span><span class="dimmer mono" style="margin-right:14px">${o.n}</span>${esc(o.text)}</span></div>`).join("")}
+        </div>`;
     } else {
       body = `<div class="center" style="margin-bottom:24px"><div class="kicker">Which one's the truth?</div>${term(s.term, "clamp(34px,6vw,72px)")}</div>
         <div class="stack" style="max-width:820px;margin:0 auto">${s.options.map((o) => `<div class="opt">${esc(o.text)}</div>`).join("")}</div>`;
@@ -232,6 +247,20 @@ const render = {
       app.innerHTML = `<div class="spread" style="margin-bottom:20px">${logo}${roundPill(s)}</div>${body}`;
       document.getElementById("next").onclick = () => socket.emit("host:next");
       return;
+    } else if (r.kind === "hole") {
+      body = `<div class="center" style="margin-bottom:16px"><div class="kicker">Who was real?</div>
+          <div style="max-width:900px;margin:8px auto 0">${term(r.prompt, "clamp(20px,3.5vw,40px)")}</div></div>
+        ${revealGrid(
+          r.options
+            .map(
+              (o) => `<div class="opt ${o.isReal ? "truth" : ""}">
+                <div class="spread"><span>${esc(o.text)}</span><span class="${o.isReal ? "badge-truth" : "dimmer"}" style="white-space:nowrap;margin-left:14px">${o.isReal ? "REAL · " + esc(o.authorName) : "🤖 BOT"}</span></div>
+                ${o.caughtBy.length ? `<div class="who">caught by ${o.caughtBy.map((n) => `<span class="name">${esc(n)}</span>`).join(", ")}</div>` : ""}
+              </div>`
+            )
+            .join(""),
+          s
+        )}`;
     }
     app.innerHTML = `<div class="spread" style="margin-bottom:20px">${logo}${roundPill(s)}</div>${body}`;
     document.getElementById("next").onclick = () => socket.emit("host:next");
@@ -239,11 +268,22 @@ const render = {
 
   gameover(s) {
     const w = s.scores[0];
+    const winnerPrize = s.mode === "hole" && s.prizes ? s.prizes.find((p) => p.name === w?.name)?.prize : null;
+    const prizeBlock =
+      s.mode === "hole" && s.prizes
+        ? `<div class="card stack" style="max-width:620px;margin:8px auto 0">
+            <div class="kicker">🏆 ${esc(w?.name || "Winner")} collects</div>
+            <div class="big" style="font-size:clamp(24px,4vw,40px)">${esc(winnerPrize || "their choice 😈")}</div>
+            <div class="kicker" style="margin-top:10px">The losers owe</div>
+            ${s.prizes.slice(1).map((p) => `<div class="spread"><span class="muted">${esc(p.name)} staked</span><span>${esc(p.prize)}</span></div>`).join("") || `<div class="muted">—</div>`}
+          </div>`
+        : "";
     app.innerHTML = `<div class="spread" style="margin-bottom:36px">${logo}<div class="pill">Game over</div></div>
       <div class="center stack-lg" style="margin-top:2%">
-        <div class="kicker">The biggest menace at the table</div>
+        <div class="kicker">${s.mode === "hole" ? "Filthiest mind in the room" : "The biggest menace at the table"}</div>
         <div class="big">🏆 ${esc(w ? w.name : "—")}</div>
         <div class="stack" style="max-width:560px;margin:0 auto;width:100%">${scoreList(s.scores)}</div>
+        ${prizeBlock}
         <button class="accent" id="again" style="max-width:320px;margin:16px auto 0">Run it back</button>
       </div>`;
     document.getElementById("again").onclick = () => socket.emit("host:again");

@@ -22,6 +22,7 @@ const DECKS = load("decks.json").decks;
 const FILLGAP = load("fillgap.json");
 const IMPOSTER = load("imposter.json");
 const FINGER = load("finger.json");
+const HOLE = load("hole.json");
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const PHASES = { LOBBY: "LOBBY", WRITE: "WRITE", VOTE: "VOTE", JUDGE: "JUDGE", REVEAL: "REVEAL", GAMEOVER: "GAMEOVER" };
@@ -306,6 +307,92 @@ const MODES = {
       };
     },
   },
+
+  // ── WHOSE HOLE IS IT ANYWAY? (hidden-human deduction · X-rated · gay · 18+) ──
+  // Each round: everyone confesses an answer. The bot pads the pool to 10 decoys.
+  // You score by correctly fingering which answers are REAL men in the room — and
+  // lose a point for falling for the bot. Winner's secret prize is revealed at the
+  // end; the losers have to deliver it. Uses room.guesses (multi-select), not votes.
+  hole: {
+    id: "hole",
+    name: HOLE.name,
+    tagline: HOLE.tagline,
+    minPlayers: 2,
+    adult: true,
+    writeTarget: PHASES.VOTE,
+    scoring: { caughtHuman: 2, taggedBot: -1 },
+
+    buildPool(room) { room.pool = shuffle(HOLE.rounds.map((_, i) => i)); }, // queue of round indexes
+    beginRound(room) {
+      if (!room.pool?.length) this.buildPool(room);
+      const r = HOLE.rounds[room.pool.pop()] || HOLE.rounds[0];
+      room.prompt = r.prompt;
+      room.roundFakes = r.fakes;
+      room.guesses = new Map();
+      room.phase = PHASES.WRITE;
+    },
+    writeComplete(room) {
+      const p = activePlayers(room);
+      return p.length > 0 && p.every((x) => room.submissions.has(x.id));
+    },
+    buildVote(room) {
+      const reals = [...room.submissions.entries()].map(([authorId, text]) => ({ text, authorId }));
+      const fakesNeeded = Math.max(0, 10 - reals.length);
+      const fakes = [];
+      if (fakesNeeded >= 1) fakes.push({ text: pick(HOLE.quotes), authorId: null }); // always one sassy quote decoy
+      for (const t of shuffle(room.roundFakes)) { if (fakes.length >= fakesNeeded) break; fakes.push({ text: t, authorId: null }); }
+      room.options = shuffle([...reals, ...fakes]).map((o, i) => ({ id: "o" + i, text: o.text, authorId: o.authorId }));
+      room.phase = PHASES.VOTE;
+    },
+    voteComplete(room) {
+      const p = activePlayers(room);
+      return p.length > 0 && p.every((x) => room.guesses.has(x.id));
+    },
+    score(room) {
+      const S = this.scoring;
+      for (const [voterId, picks] of room.guesses) {
+        const g = room.players.get(voterId);
+        if (!g) continue;
+        for (const oid of picks || []) {
+          const opt = room.options.find((o) => o.id === oid);
+          if (!opt) continue;
+          if (opt.authorId && opt.authorId !== voterId) g.score += S.caughtHuman; // nailed a real man
+          else if (opt.authorId === null) g.score += S.taggedBot;                  // fell for the bot
+        }
+      }
+      return {
+        kind: "hole",
+        prompt: room.prompt,
+        options: room.options.map((o) => ({
+          text: o.text,
+          isReal: !!o.authorId,
+          authorName: o.authorId ? room.players.get(o.authorId)?.name ?? "(left)" : null,
+          caughtBy: [...room.guesses.entries()].filter(([, picks]) => (picks || []).includes(o.id)).map(([vid]) => room.players.get(vid)?.name ?? "(left)"),
+        })),
+      };
+    },
+    hostView(room) {
+      if (room.phase === PHASES.WRITE)
+        return { prompt: room.prompt, submitted: names(room, [...room.submissions.keys()]), waitingOn: waiting(room, (p) => !room.submissions.has(p.id)) };
+      return {
+        prompt: room.prompt,
+        options: room.options.map((o, i) => ({ n: i + 1, text: o.text })),
+        voted: names(room, [...room.guesses.keys()]),
+        waitingOn: waiting(room, (p) => !room.guesses.has(p.id)),
+      };
+    },
+    playerView(room, s) {
+      if (room.phase === PHASES.WRITE)
+        return { prompt: room.prompt, done: room.submissions.has(s.id), instruction: "Confess — keep it short & filthy", inputKind: "short" };
+      return {
+        prompt: room.prompt,
+        options: room.options.filter((o) => o.authorId !== s.id).map((o) => ({ id: o.id, text: o.text })),
+        multi: true,
+        done: room.guesses.has(s.id),
+        instruction: "Tap every answer you reckon is a REAL man in the room",
+      };
+    },
+  },
 };
 
 const names = (room, ids) => ids.map((id) => room.players.get(id)?.name).filter(Boolean);
@@ -325,6 +412,8 @@ function newRoom(hostSocketId) {
     pool: [],
     submissions: new Map(),
     votes: new Map(),
+    guesses: new Map(), // hole mode: voterId -> [optionId] (multi-select)
+    prizes: new Map(),  // hole mode: playerId -> secret prize, set in the lobby
     options: [],
   };
   rooms.set(code, room);
@@ -343,6 +432,7 @@ function nextRound(room) {
   room.round += 1;
   room.submissions = new Map();
   room.votes = new Map();
+  room.guesses = new Map();
   room.options = [];
   MODES[room.settings.mode].beginRound(room);
   pushAll(room);
@@ -372,7 +462,7 @@ function lobbyState(room) {
     settings: room.settings,
     round: room.round,
     totalRounds: room.settings.rounds,
-    modes: Object.values(MODES).map((m) => ({ id: m.id, name: m.name, tagline: m.tagline, minPlayers: m.minPlayers, needsDecks: !!m.needsDecks })),
+    modes: Object.values(MODES).map((m) => ({ id: m.id, name: m.name, tagline: m.tagline, minPlayers: m.minPlayers, needsDecks: !!m.needsDecks, adult: !!m.adult })),
     decks: DECKS.map((d) => ({ id: d.id, name: d.name, tagline: d.tagline, nsfw: d.nsfw, count: d.cards.length })),
   };
 }
@@ -382,7 +472,7 @@ function pushHost(room) {
   let extra = {};
   if ([PHASES.WRITE, PHASES.VOTE, PHASES.JUDGE].includes(room.phase)) extra = m.hostView(room);
   else if (room.phase === PHASES.REVEAL) extra = { reveal: room.lastReveal, scores: scoreboard(room) };
-  else if (room.phase === PHASES.GAMEOVER) extra = { scores: scoreboard(room) };
+  else if (room.phase === PHASES.GAMEOVER) extra = { scores: scoreboard(room), prizes: prizeList(room) };
   io.to("host:" + room.code).emit("host:state", { ...base, ...extra });
 }
 function pushPlayer(room, pid) {
@@ -390,10 +480,20 @@ function pushPlayer(room, pid) {
   if (!s) return;
   const view = { phase: room.phase, code: room.code, mode: room.settings.mode, you: { name: s.name, score: s.score } };
   const m = MODES[room.settings.mode];
-  if ([PHASES.WRITE, PHASES.VOTE, PHASES.JUDGE].includes(room.phase)) Object.assign(view, m.playerView(room, s));
-  else if (room.phase === PHASES.REVEAL || room.phase === PHASES.GAMEOVER) view.scores = scoreboard(room);
+  if (room.phase === PHASES.LOBBY && room.settings.mode === "hole") {
+    view.needPrize = true;
+    view.prize = room.prizes.get(pid) || "";
+  } else if ([PHASES.WRITE, PHASES.VOTE, PHASES.JUDGE].includes(room.phase)) {
+    Object.assign(view, m.playerView(room, s));
+  } else if (room.phase === PHASES.REVEAL || room.phase === PHASES.GAMEOVER) {
+    view.scores = scoreboard(room);
+    if (room.phase === PHASES.GAMEOVER && room.settings.mode === "hole") view.yourPrize = room.prizes.get(pid) || "";
+  }
   io.to(s.id).emit("player:state", view);
 }
+// Prizes revealed only at game over: who staked what, winner first.
+const prizeList = (room) =>
+  scoreboard(room).map((p) => ({ name: p.name, prize: room.prizes.get(p.id) || "Winner's choice 😈" }));
 const pushAll = (room) => { pushHost(room); activePlayers(room).forEach((p) => pushPlayer(room, p.id)); };
 
 // ── Sockets ──────────────────────────────────────────────────────────────────
@@ -416,7 +516,7 @@ io.on("connection", (socket) => {
     if (typeof s.spicy === "boolean") room.settings.spicy = s.spicy;
     if (Array.isArray(s.deckIds) && s.deckIds.length) room.settings.deckIds = s.deckIds;
     if (Number.isInteger(s.rounds)) room.settings.rounds = Math.max(1, Math.min(20, s.rounds));
-    pushHost(room);
+    pushAll(room); // mode changes must reach phones too (e.g. hole's prize prompt)
   });
 
   socket.on("host:start", () => {
@@ -490,6 +590,28 @@ io.on("connection", (socket) => {
     if (!room.options.some((o) => o.id === optionId)) return;
     room.judgePick = optionId;
     goReveal(room);
+  });
+
+  // hole mode: stake your secret prize in the lobby (revealed only at game over).
+  socket.on("player:prize", ({ text }) => {
+    const room = rooms.get(socket.data?.code);
+    if (!room || room.phase !== PHASES.LOBBY) return;
+    room.prizes.set(socket.id, (text || "").trim().slice(0, 120));
+    pushPlayer(room, socket.id);
+    pushHost(room);
+  });
+
+  // hole mode: multi-select guess of which answers are real men in the room.
+  socket.on("player:guess", ({ optionIds }) => {
+    const room = rooms.get(socket.data?.code);
+    if (!room || room.phase !== PHASES.VOTE || room.settings.mode !== "hole") return;
+    const own = new Set(room.options.filter((o) => o.authorId === socket.id).map((o) => o.id));
+    const valid = (Array.isArray(optionIds) ? optionIds : [])
+      .filter((id) => room.options.some((o) => o.id === id) && !own.has(id)); // can't pick your own confession
+    room.guesses.set(socket.id, [...new Set(valid)]);
+    pushPlayer(room, socket.id);
+    pushHost(room);
+    if (MODES[room.settings.mode].voteComplete(room)) goReveal(room);
   });
 
   socket.on("disconnect", () => {
